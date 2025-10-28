@@ -31,15 +31,17 @@ const userSchema=new mongoose.Schema({
         type:String
     }
 })
+// to create session token 
 userSchema.methods.generateAuthToken=function(){
     const token=jwt.sign({ _id:this._id},process.env.JWT_SECRET);
     return token;
 }
+// during the time of login we need to compare the password that has been passed in the database and the password that has been passed as reference 
 
 userSchema.methods.comparePassword= async function(password){
     return await bcrypt.compare(password,this.password);
 }
-
+// Used for hashing the password with 10 rounds of salting (salting is 2^10 iterations of hashing)
 userSchema.statics.hashPassword=async function(password) {
     return await bcrypt.hash(password,10);
 }
