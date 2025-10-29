@@ -12,7 +12,7 @@ module.exports.registerUser=async (req,res,next)=>{
         return res.status(400).json({errors:errors.array()});
     }
 
-    console.log(req.body);
+    
     // gets data
     const {fullname,email,password}=req.body;
     // gets the hashedpassword from the usermodel hashpassword method 
