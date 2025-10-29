@@ -1,4 +1,6 @@
-const mongoose=reuire('mongoose');
+//use to  define the schema or the data that we are taking from the user itself 
+
+const mongoose=require('mongoose');
 
 const bcrypt=require('bcrypt');
 const jwt=require('jsonwebtoken')

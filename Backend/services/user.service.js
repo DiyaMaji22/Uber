@@ -1,6 +1,6 @@
 const userModel=require('../modal/user.model');
 
-
+// file used to create user 
 module.exports.createUser =async ({
     firstname,lastname,email,password
 })=>{

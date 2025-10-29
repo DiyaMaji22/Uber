@@ -13,4 +13,4 @@ userController.registerUser
 
 
 
-module.exports-=router;
+module.exports=router;
