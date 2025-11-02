@@ -29,3 +29,46 @@ module.exports.registerUser=async (req,res,next)=>{
     res.status(200).json({token,user});
 
 }
+
+
+// Login route 
+module.exports.loginUser = async (req, res, next) => {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        const { email, password } = req.body;
+
+        // Explicitly select password field and other needed fields
+        const user = await userModel.findOne({ email })
+            .select('+password fullname email');
+
+        if (!user) {
+            return res.status(401).json({ message: 'Invalid email or password' });
+        }
+
+        const isMatch = await user.comparePassword(password);
+
+        if (!isMatch) {
+            return res.status(401).json({ message: 'Invalid email or password' });
+        }
+
+        const token = user.generateAuthToken();
+        
+        // Remove password from response
+        const userResponse = user.toObject();
+        delete userResponse.password;
+        
+        res.status(200).json({ token, user: userResponse });
+    } catch (error) {
+        console.error('Login error:', error);
+        res.status(500).json({ message: 'Internal server error during login' });
+    }
+}
+
+
+module.exports.getuserProfile=async (req,res,next)=>{
+    res.status(200).json(req.user);
+}
