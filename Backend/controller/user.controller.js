@@ -56,7 +56,7 @@ module.exports.loginUser = async (req, res, next) => {
         }
 
         const token = user.generateAuthToken();
-        
+        res.cookie('token',token)
         // Remove password from response
         const userResponse = user.toObject();
         delete userResponse.password;
