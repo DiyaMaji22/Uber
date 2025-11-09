@@ -17,11 +17,12 @@ app.use(cookieParser());
 
 connectToDb();
 const userRoutes=require('./routes/userroute')
-
+const captainRoutes=require('./routes/captain.routes')
 
 app.get('/',(req,res)=>{
     res.send("Hello world");
 })
 
 app.use('/users',userRoutes);
+app.use('/captains',captainRoutes);
 module.exports=app;
