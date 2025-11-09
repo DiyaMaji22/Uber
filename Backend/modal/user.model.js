@@ -35,7 +35,7 @@ const userSchema=new mongoose.Schema({
 })
 // to create session token 
 userSchema.methods.generateAuthToken=function(){
-    const token=jwt.sign({ _id:this._id},process.env.JWT_SECRET);
+    const token = jwt.sign({ _id: this._id }, process.env.JWT_SECRET, { expiresIn: '24h' });
     return token;
 }
 // during the time of login we need to compare the password that has been passed in the database and the password that has been passed as reference 
