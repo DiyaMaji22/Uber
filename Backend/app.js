@@ -1,5 +1,7 @@
 const dotenv=require('dotenv');
-dotenv.config();
+const path = require('path');
+// load .env from this file's directory so running node from repo root still finds Backend/.env
+dotenv.config({ path: path.join(__dirname, '.env') });
 const express=require('express');
 const app=express();
 const cors=require('cors');
@@ -24,5 +26,5 @@ app.get('/',(req,res)=>{
 })
 
 app.use('/users',userRoutes);
-app.use('/captains',captainRoutes);
+app.use('/captain', captainRoutes);
 module.exports=app;

@@ -1,23 +1,25 @@
-const capatainModel=require('../models/captain.model');
-const bcrypt=require('bcrypt');
+const captainModel = require('../modal/captain.model');
 
-module.exports.createCaptain=async({email,password,firstname,lastname,color,plate,capacity,vehicleType})=>{
-    if(!email||!password||!firstname||!lastname||!vehicle){
+module.exports.createCaptain = async ({ email, password, firstname, lastname, color, plate, capacity, vehicleType }) => {
+    // minimal validation for required fields
+    if (!email || !password || !firstname || !lastname || !color || !plate || !capacity || !vehicleType) {
         throw new Error('All fields are required');
     }
-    const captain=capatainModel.create({
-        fullname:{
-            firstname:fullname.firstname,
-            lastname:fullname.lastname
+
+    const captain = await captainModel.create({
+        fullname: {
+            firstname,
+            lastname
         },
         email,
         password,
-        vehicle:{
+        vehicle: {
             color,
             plate,
             capacity,
             vehicleType
         }
-    })
+    });
+
     return captain;
-}
+};
