@@ -1,13 +1,24 @@
 const http=require('http');
 const app= require('./app');
-const port=process.env.PORT || 3000;
+const port = parseInt(process.env.PORT, 10) || 5000;
 
-const server=http.createServer(app);
+function startServer(p, triesLeft = 5) {
+    const server = http.createServer(app);
 
-server.on('error', (error) => {
-    console.error('Server error:', error);
-});
+    server.on('error', (error) => {
+        if (error && error.code === 'EADDRINUSE' && triesLeft > 0) {
+            console.warn(`Port ${p} in use, trying port ${p + 1} (${triesLeft - 1} attempts left)`);
+            // try next port
+            startServer(p + 1, triesLeft - 1);
+            return;
+        }
+        console.error('Server error:', error);
+        process.exit(1);
+    });
 
-server.listen(port,()=>{
-    console.log(`This server is running on port ${port}`);
-});
+    server.listen(p, () => {
+        console.log(`This server is running on port ${p}`);
+    });
+}
+
+startServer(port);
