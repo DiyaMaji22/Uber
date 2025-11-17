@@ -140,10 +140,115 @@ Register a new captain (driver/owner) in the system.
 - A JWT token is returned on successful registration.
 - Ensure your `.env` contains `DB_CONNECT` and `JWT_SECRET` and the DB is reachable before testing this endpoint.
 
+---
 
-### GET /users/profile
+### POST /captain/login
 
-Get the currently logged-in user's profile information.
+Login an existing captain.
+
+#### Request Body
+
+```json
+{
+  "email": "string",       // Required, valid email format
+  "password": "string"     // Required, minimum 6 characters
+}
+```
+
+#### Success Response
+- **Status Code**: 200 OK
+- **Content**:
+```json
+{
+  "token": "JWT_TOKEN",
+  "captain": {
+    "fullname": { "firstname": "string", "lastname": "string" },
+    "email": "string",
+    "vehicle": { "color": "string", "plate": "string", "capacity": 2, "vehicleType": "motorcycle" }
+  }
+}
+```
+
+#### Error Responses
+- **400 Bad Request** — validation errors
+- **401 Unauthorized** — invalid email or password:
+```json
+{ "message": "Invalid email or password" }
+```
+
+---
+
+### GET /captain/profile
+
+Get the currently logged-in captain's profile.
+
+#### Authentication
+- Required
+- Bearer Token in Authorization header or token in cookies
+
+#### Request Headers
+```
+Authorization: Bearer <your_jwt_token>
+```
+
+#### Success Response
+- **Status Code**: 200 OK
+- **Content**:
+```json
+{
+  "captain": {
+    "fullname": { "firstname": "string", "lastname": "string" },
+    "email": "string",
+    "vehicle": { "color": "string", "plate": "string", "capacity": 2, "vehicleType": "motorcycle" },
+    "status": "inactive"
+  }
+}
+```
+
+#### Error Response
+- **401 Unauthorized**:
+```json
+{ "message": "Unauthorized" }
+```
+
+---
+
+### GET /captain/logout
+
+Logout the captain and invalidate their token.
+
+#### Authentication
+- Required
+- Bearer Token in Authorization header or token in cookies
+
+#### Request Headers
+```
+Authorization: Bearer <your_jwt_token>
+```
+
+#### Success Response
+- **Status Code**: 200 OK
+- **Content**:
+```json
+{ "message": "Logout Successful" }
+```
+
+#### Effects
+- Clears the token cookie
+- Adds token to blacklist (expires after 24 hours)
+
+#### Error Response
+- **401 Unauthorized**:
+```json
+{ "message": "Unauthorized" }
+```
+
+---
+---
+
+## User Endpoints
+
+### GET /users/profileGet the currently logged-in user's profile information.
 
 #### Authentication
 - Required
