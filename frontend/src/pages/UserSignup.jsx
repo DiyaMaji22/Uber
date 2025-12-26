@@ -1,5 +1,7 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link ,useNavigate} from 'react-router-dom'
+import axios from 'axios';
+import UserDataContext from '../context/userContext';
 const UserSignup = () => {
   const[email,setEmail]=React.useState('');
   const [password,setPassword]=React.useState('');  
@@ -7,16 +9,28 @@ const UserSignup = () => {
   const[lastName,setLastName]=React.useState('');
   const [userData,setUserData]=React.useState({});
 
+  const navigate=useNavigate();
+
+
+  const {user,setUser}=React.useContext(UserDataContext);
   const submitHandler=(e)=>{
 
     e.preventDefault();
-    setUserData({
-      firstName:firstName,
-      lastName:lastName,
+    const newUser={
+      fullname:{
+        firstName:firstName,
+        lastName:lastName
+      },
       email:email,
       password:password
-    });
-    console.log(userData);
+    }
+    const response=await axios.post(`${import.meta.env.VITE_BASE_URL}/api/users/register`,newUser);
+    if(response.status===201){
+      const data=response.data;
+
+      navigate('/userlogin');
+    }
+    
     setEmail('');
    setPassword('');
    setFirstName('');
@@ -68,7 +82,7 @@ const UserSignup = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button className='bg-black rounded px-4 py-2 border-gray-200 w-full text-base placeholder:text-sm mb-5 text-white font-semibold' >Login</button>
+        <button className='bg-black rounded px-4 py-2 border-gray-200 w-full text-base placeholder:text-sm mb-5 text-white font-semibold' >Create Account</button>
         <p className='flex justify-center items-center'>Already have a Account?<Link to='/userlogin' className='text-blue-600' >Login Here</Link></p>
      </form>
      </div>
