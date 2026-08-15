@@ -8,7 +8,7 @@
           <img className='w-16 ml-8' src='https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png'/>
           <div className='bg-white py-4 px-4 pb-7'>
             
-            <h2 className='text-3xl font-bold'>Get Started with Uber</h2>
+            <h2 className='text-3xl font-bold'>Get Started with DriveThru</h2>
           <Link to="/userlogin" className='flex items-center justify-center w-full bg-black text-white py-3 rounded-full mt-5'>Continue</Link>
           </div>
       

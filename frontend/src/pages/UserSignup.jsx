@@ -1,7 +1,8 @@
 import React from 'react'
 import { Link ,useNavigate} from 'react-router-dom'
 import axios from 'axios';
-import UserDataContext from '../context/userContext';
+import {UserDataContext} from '../context/userContext';
+
 const UserSignup = () => {
   const[email,setEmail]=React.useState('');
   const [password,setPassword]=React.useState('');  
@@ -13,22 +14,28 @@ const UserSignup = () => {
 
 
   const {user,setUser}=React.useContext(UserDataContext);
-  const submitHandler=(e)=>{
+  const submitHandler=async (e)=>{
 
     e.preventDefault();
     const newUser={
       fullname:{
-        firstName:firstName,
-        lastName:lastName
+        firstname:firstName,
+        lastname:lastName
       },
       email:email,
       password:password
     }
-    const response=await axios.post(`${import.meta.env.VITE_BASE_URL}/api/users/register`,newUser);
-    if(response.status===201){
-      const data=response.data;
-
-      navigate('/userlogin');
+    
+    try {
+      const response=await axios.post(`${import.meta.env.VITE_BASE_URL}/users/register`,newUser);
+      if(response.status===201){
+        const data=response.data;
+        setUser(data.user);
+       
+        navigate('/Home');
+      }
+    } catch (error) {
+      console.error('Signup error:', error.response?.data || error.message);
     }
     
     setEmail('');
@@ -38,8 +45,8 @@ const UserSignup = () => {
   }
   return (
     <div>
-      <div className='p-7 flex flex-col justify-between h-screen'>
-      <img className='w-16 mb-10' src='https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png'/>
+      <div className='p-7 flex flex-col justify-start h-screen'>
+      <img className='w-16 mb-3' src='https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png'/>
      <div>
       <form onSubmit={(e)=>{
         submitHandler(e)
@@ -87,13 +94,11 @@ const UserSignup = () => {
      </form>
      </div>
      <div>
-      <form>
-        <Link className='bg-yellow-400 rounded px-4 py-2  w-full text-base placeholder:text-sm mb-3 text-black font-semibold border border-gray-350 flex items-center justify-center mt-42' to='/captainlogin'>Sign in as Captain?</Link>
-     </form>
+      <p className='text-[10px] mt-4'>By proceeding,you consent to get calls,whatsapp or SMS messages,including by automated means,from Drivethru and its affiliates to the number provided.</p>
      </div>
       
     </div>
-    </div>
+    </div>  
   )
 }
 
